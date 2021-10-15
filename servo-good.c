@@ -12,23 +12,23 @@
 #define _XTAL_FREQ 10000000
 
 int antal = 0;
-int steering = 0;
+int steering = 1;
 
 void __interrupt() ISR()         //Her lander programmet når det bliver afbrudt (interrupt))
 {  
     if(TMR0IF==1)                //Hvis det er en TIMER0 interrupt
     {
         antal++;                 //Læg én til antal
-        if(antal == 120)          //Er antal 1000?
+        if(antal == 80)          //Er antal 1000?
         {
         antal = 0;               //Nulstil variablen antal
         }
         
-        if (antal < 4+steering) {RA1 = 1;}
+        if (antal < 3+steering) {RA1 = 1;}
         else {RA1 = 0;}
         
         TMR0IF=0;                //Nulstil timer0 flaget så den kan interrupte igen
-        TMR0 = 73;              //Indlæs ny værdi i TIMERregistret, (Note: Bemærk at den skal bruge én ekstra
+        TMR0 = 101;              //Indlæs ny værdi i TIMERregistret, (Note: Bemærk at den skal bruge én ekstra
                                                    //for at starte op igen, så 101 i stedet for 100  
         
     } 
@@ -36,11 +36,11 @@ void __interrupt() ISR()         //Her lander programmet når det bliver afbrudt
 void setup()                //Her foregår heleopsætningen af timerinterrupt
 {
     OPTION_REGbits.PS2 = 0;
-    OPTION_REGbits.PS1 = 0;
+    OPTION_REGbits.PS1 = 1;
     OPTION_REGbits.PS0 = 0;
     OPTION_REGbits.PSA = 0;
     OPTION_REGbits.T0CS = 0;
-    TMR0=72;       // Load the time value for 1ms delay
+    TMR0=100;       // Load the time value for 1ms delay
     TMR0IE=1;       //Enable timer interrupt bit in PIE1 register
     GIE=1;          //Enable Global Interrupt
     PEIE=1;         //Enable the Peripheral Interrupt
